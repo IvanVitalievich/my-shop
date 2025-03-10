@@ -137,3 +137,98 @@ input, select {
         font-size: 14px;
     }
 }
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--footer-bg, #222);
+    color: var(--footer-text, #fff);
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+.footer a {
+    color: var(--footer-link, #4da6ff);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+:root {
+    --footer-bg: #222;
+    --footer-text: #fff;
+    --footer-link: #4da6ff;
+}
+
+.dark-theme {
+    --footer-bg: #111;
+    --footer-text: #ddd;
+    --footer-link: #ff9800;
+}
+
+.about-btn {
+    position: fixed;
+    bottom: 60px;
+    right: 20px;
+    padding: 10px 15px;
+    background: var(--btn-bg, #ff9800);
+    color: var(--btn-text, #fff);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.about-btn:hover {
+    background: var(--btn-hover, #e68900);
+}
+
+/* Стили для модального окна */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: var(--modal-bg, #222);
+    color: var(--modal-text, #fff);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    max-height: 70vh; /* Ограничиваем высоту окна */
+    overflow-y: auto; /* Добавляем вертикальную прокрутку */
+    padding: 20px; /* Отступы, чтобы текст не прилипал к краям */
+    border-radius: 10px;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.dark-theme {
+    --modal-bg: #111;
+    --modal-text: #ddd;
+    --btn-bg: #ff9800;
+    --btn-text: #fff;
+    --btn-hover: #e68900;
+}

@@ -1,14 +1,30 @@
-let products = [];
+let products = JSON.parse(localStorage.getItem("products")) || [];
 let isAdmin = false;
 let visibleCount = 6;
+
+function saveProducts() {
+    localStorage.setItem("products", JSON.stringify(products));
+}
 
 function showAdminPanel() {
     document.getElementById('adminPanel').classList.remove('hidden');
 }
 
-function loginAdmin() {
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function loginAdmin(event) {
+    event.preventDefault();
     let password = document.getElementById('adminPassword').value;
-    if (password === "1234") { 
+    let hashedInput = await hashPassword(password);
+    const storedHash = "51f9462e7118f316b81ecba0b777e9f3ab1d90ece5760b03ce974128b9dbfd0e"; // Новый хэш
+
+    if (hashedInput === storedHash) {
         isAdmin = true;
         document.getElementById('adminPanel').classList.add('hidden');
         document.getElementById('fullAdminPanel').classList.remove('hidden');
@@ -40,15 +56,18 @@ function addProduct() {
 
     let product = { id, name, price, link, image, category };
     products.push(product);
+    saveProducts();
+    renderProducts();
+
     document.getElementById('productName').value = "";
     document.getElementById('productPrice').value = "";
     document.getElementById('productLink').value = "";
     document.getElementById('productImage').value = "";
-    renderProducts();
 }
 
 function deleteProduct(id) {
     products = products.filter(product => product.id !== id);
+    saveProducts();
     renderProducts();
 }
 
@@ -69,6 +88,7 @@ function renderProducts() {
             ${isAdmin ? `<button onclick="deleteProduct(${product.id})">Удалить</button>` : ""}
         `;
         list.appendChild(div);
+        setTimeout(() => div.style.opacity = 1, 50);
     });
 
     document.getElementById('loadMoreBtn').classList.toggle('hidden', products.length <= visibleCount);
@@ -106,9 +126,35 @@ function renderFilteredProducts(filteredProducts) {
             ${isAdmin ? `<button onclick="deleteProduct(${product.id})">Удалить</button>` : ""}
         `;
         list.appendChild(div);
+        setTimeout(() => div.style.opacity = 1, 50);
     });
 }
 
 function toggleTheme() {
     document.body.classList.toggle("light-theme");
 }
+
+function toggleAbout() {
+    let modal = document.getElementById("about-modal");
+    modal.style.display = modal.style.display === "flex" ? "none" : "flex";
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    renderProducts();
+
+    const modal = document.getElementById("about-modal");
+    const closeButtons = document.querySelectorAll(".close");
+
+    closeButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+    });
+
+    // Закрытие при клике вне окна
+    window.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+});
